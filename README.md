@@ -1,1 +1,1 @@
-# e-commerce-admin-api-server
+# 제품 쇼핑몰 관리자 페이지 RESTful API Server
