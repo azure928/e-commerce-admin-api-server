@@ -23,3 +23,15 @@ export async function createCouponTypes(data) {
     );
   }
 }
+
+export async function readIssuedCoupon(id) {
+  const selectedCoupon = await couponRepository.readIssuedCoupon(id);
+
+  if (!selectedCoupon) {
+    const error = new Error('해당 하는 쿠폰이 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  } else {
+    return selectedCoupon;
+  }
+}

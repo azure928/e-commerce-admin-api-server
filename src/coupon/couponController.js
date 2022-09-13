@@ -21,3 +21,19 @@ export const createCouponTypes = async (req, res) => {
     );
   }
 };
+
+export const readIssuedCoupon = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const selectedCoupon = await couponService.readIssuedCoupon(id);
+    res.status(200).json(selectedCoupon);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode || 500).send(
+      { error: error.message } || {
+        error: 'Internal Server Error',
+      }
+    );
+  }
+};
