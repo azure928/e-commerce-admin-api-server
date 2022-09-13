@@ -69,3 +69,25 @@ export async function readOrders(keyword, start, end) {
     order: [['createdAt', 'DESC']],
   });
 }
+
+export async function readOrderById(id) {
+  return await Orders.findOne({
+    attributes: ['id'],
+    where: {
+      id: id,
+    },
+  });
+}
+
+export const updateOrderById = async (id, delivery_status) => {
+  return await Orders.update(
+    {
+      delivery_status: delivery_status,
+    },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
+};
