@@ -11,3 +11,15 @@ export async function readOrders(keyword, start, end) {
     return selectedOrders;
   }
 }
+
+export async function updateOrder(id, delivery_status) {
+  const selectedOrder = await orderRepository.readOrderById(id);
+
+  if (!selectedOrder) {
+    const error = new Error('수정할 주문내역이 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  } else {
+    await orderRepository.updateOrderById(id, delivery_status);
+  }
+}
