@@ -3,35 +3,36 @@ const { Model, Sequelize } = _sequelize;
 
 export default class products extends Model {
   static init(sequelize, DataTypes) {
-  return super.init({
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    name: {
-      type: DataTypes.STRING(300),
-      allowNull: false
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    tableName: 'products',
-    timestamps: true,
-    indexes: [
+    return super.init(
       {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+        id: {
+          autoIncrement: true,
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          primaryKey: true,
+        },
+        name: {
+          type: DataTypes.STRING(300),
+          allowNull: false,
+        },
+        price: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
       },
-    ]
-  });
+      {
+        sequelize,
+        tableName: 'products',
+        timestamps: true,
+        indexes: [
+          {
+            name: 'PRIMARY',
+            unique: true,
+            using: 'BTREE',
+            fields: [{ name: 'id' }],
+          },
+        ],
+      }
+    );
   }
 }
