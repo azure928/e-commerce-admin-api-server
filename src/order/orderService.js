@@ -1,7 +1,7 @@
 import * as orderRepository from './orderRepository.js';
 
-export async function readOrders(keyword, start, end) {
-  const selectedOrders = await orderRepository.readOrders(keyword, start, end);
+export async function readOrders() {
+  const selectedOrders = await orderRepository.readOrders();
 
   if (selectedOrders.length == 0) {
     const error = new Error();
