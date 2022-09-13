@@ -1,10 +1,8 @@
-import prisma from '../../prisma/prisma-client.js';
+import { db } from '../../database/models/index.js';
+const orders = db.orders;
+import sequelize from 'sequelize';
+const Op = sequelize.Op;
 
 export async function readOrders() {
-  const selectedOrders = await prisma.orders.findMany({
-    orderBy: {
-      created_at: 'desc',
-    },
-  });
-  return selectedOrders;
+  return await orders.findAll({});
 }
