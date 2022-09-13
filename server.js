@@ -2,7 +2,7 @@ import http from 'http';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import express from 'express';
-import routes from './components/indexRouter.js';
+import routes from './src/indexRouter.js';
 
 dotenv.config();
 
