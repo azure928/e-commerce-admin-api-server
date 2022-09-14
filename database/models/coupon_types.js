@@ -19,7 +19,7 @@ export default class coupon_types extends Model {
           type: DataTypes.STRING(300),
           allowNull: true,
         },
-        discount_amount: {
+        discount_price: {
           type: DataTypes.INTEGER,
           allowNull: true,
         },

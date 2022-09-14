@@ -49,7 +49,7 @@ export default class orders extends Model {
           type: DataTypes.INTEGER,
           allowNull: true,
           references: {
-            model: 'issued_coupon',
+            model: 'issued_coupons',
             key: 'id',
           },
         },

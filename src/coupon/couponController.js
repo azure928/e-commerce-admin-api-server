@@ -5,7 +5,7 @@ export const createCouponTypes = async (req, res) => {
   try {
     const data = {
       type: req.body.type,
-      discount_amount: req.body.discount_amount,
+      discount_price: req.body.discount_price,
       coupon_name: req.body.coupon_name,
       coupon_code: v4(),
     };
@@ -22,12 +22,26 @@ export const createCouponTypes = async (req, res) => {
   }
 };
 
-export const readIssuedCoupon = async (req, res) => {
+export const readIssuedCouponsUsage = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const selectedCoupon = await couponService.readIssuedCoupon(id);
-    res.status(200).json(selectedCoupon);
+    const selectedIssuedCoupon = await couponService.readIssuedCouponsUsage(id);
+    res.status(200).json(selectedIssuedCoupon);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode || 500).send(
+      { error: error.message } || {
+        error: 'Internal Server Error',
+      }
+    );
+  }
+};
+
+export const readCouponTypesStatistic = async (req, res) => {
+  try {
+    const selectedCouponTypes = await couponService.readCouponTypesStatistic();
+    res.status(200).json(selectedCouponTypes);
   } catch (error) {
     console.log(error);
     return res.status(error.statusCode || 500).send(
