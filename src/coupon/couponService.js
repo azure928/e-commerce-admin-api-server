@@ -25,13 +25,25 @@ export async function createCouponTypes(data) {
 }
 
 export async function readIssuedCoupon(id) {
-  const selectedCoupon = await couponRepository.readIssuedCoupon(id);
+  const selectedIssuedCoupon = await couponRepository.readIssuedCouponById(id);
 
-  if (!selectedCoupon) {
+  if (!selectedIssuedCoupon) {
     const error = new Error('해당 하는 쿠폰이 존재하지 않습니다.');
     error.statusCode = 404;
     throw error;
   } else {
-    return selectedCoupon;
+    return selectedIssuedCoupon;
+  }
+}
+
+export async function readCouponTypesStatistic() {
+  const selectedCouponTypes = await couponRepository.readCouponTypesStatistic();
+
+  if (!selectedCouponTypes) {
+    const error = new Error('쿠폰타입이 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  } else {
+    return selectedCouponTypes;
   }
 }

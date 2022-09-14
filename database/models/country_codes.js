@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class issued_coupon extends Model {
+export default class country_codes extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
@@ -11,39 +11,29 @@ export default class issued_coupon extends Model {
           allowNull: false,
           primaryKey: true,
         },
-        coupon_type_id: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'coupon_types',
-            key: 'id',
-          },
-        },
-        is_used: {
+        country_code: {
           type: DataTypes.STRING(100),
-          allowNull: false,
-          defaultValue: '미사용',
+          allowNull: true,
         },
-        discount_amount: {
-          type: DataTypes.INTEGER,
+        country_dcode: {
+          type: DataTypes.STRING(100),
+          allowNull: true,
+        },
+        country_name: {
+          type: DataTypes.STRING(100),
           allowNull: true,
         },
       },
       {
         sequelize,
-        tableName: 'issued_coupon',
-        timestamps: true,
+        tableName: 'country_codes',
+        timestamps: false,
         indexes: [
           {
             name: 'PRIMARY',
             unique: true,
             using: 'BTREE',
             fields: [{ name: 'id' }],
-          },
-          {
-            name: 'coupon_type_id',
-            using: 'BTREE',
-            fields: [{ name: 'coupon_type_id' }],
           },
         ],
       }

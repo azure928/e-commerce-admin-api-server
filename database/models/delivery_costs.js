@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class delivery_cost extends Model {
+export default class delivery_costs extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
@@ -430,7 +430,7 @@ export default class delivery_cost extends Model {
       },
       {
         sequelize,
-        tableName: 'delivery_cost',
+        tableName: 'delivery_costs',
         timestamps: false,
         indexes: [
           {

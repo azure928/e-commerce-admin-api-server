@@ -26,8 +26,22 @@ export const readIssuedCoupon = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const selectedCoupon = await couponService.readIssuedCoupon(id);
-    res.status(200).json(selectedCoupon);
+    const selectedIssuedCoupon = await couponService.readIssuedCoupon(id);
+    res.status(200).json(selectedIssuedCoupon);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode || 500).send(
+      { error: error.message } || {
+        error: 'Internal Server Error',
+      }
+    );
+  }
+};
+
+export const readCouponTypesStatistic = async (req, res) => {
+  try {
+    const selectedCouponTypes = await couponService.readCouponTypesStatistic();
+    res.status(200).json(selectedCouponTypes);
   } catch (error) {
     console.log(error);
     return res.status(error.statusCode || 500).send(
