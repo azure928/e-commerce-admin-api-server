@@ -14,6 +14,7 @@ export default class country_codes extends Model {
         country_code: {
           type: DataTypes.STRING(100),
           allowNull: true,
+          unique: 'unique_name',
         },
         country_dcode: {
           type: DataTypes.STRING(100),
@@ -34,6 +35,12 @@ export default class country_codes extends Model {
             unique: true,
             using: 'BTREE',
             fields: [{ name: 'id' }],
+          },
+          {
+            name: 'unique_name',
+            unique: true,
+            using: 'BTREE',
+            fields: [{ name: 'country_code' }],
           },
         ],
       }

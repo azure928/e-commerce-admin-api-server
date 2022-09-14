@@ -11,6 +11,14 @@ export default class issued_coupons extends Model {
           allowNull: false,
           primaryKey: true,
         },
+        user_id: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: 'users',
+            key: 'id',
+          },
+        },
         coupon_type_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
@@ -27,6 +35,7 @@ export default class issued_coupons extends Model {
         discounted_amount: {
           type: DataTypes.INTEGER,
           allowNull: true,
+          defaultValue: 0,
         },
       },
       {
@@ -39,6 +48,11 @@ export default class issued_coupons extends Model {
             unique: true,
             using: 'BTREE',
             fields: [{ name: 'id' }],
+          },
+          {
+            name: 'user_id',
+            using: 'BTREE',
+            fields: [{ name: 'user_id' }],
           },
           {
             name: 'coupon_type_id',

@@ -11,8 +11,16 @@ export default class orders extends Model {
           allowNull: false,
           primaryKey: true,
         },
+        user_id: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          references: {
+            model: 'users',
+            key: 'id',
+          },
+        },
         buyer_name: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(100),
           allowNull: true,
         },
         product_id: {
@@ -22,6 +30,10 @@ export default class orders extends Model {
             model: 'products',
             key: 'id',
           },
+        },
+        quantity: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
         },
         pay_state: {
           type: DataTypes.STRING(100),
@@ -37,13 +49,9 @@ export default class orders extends Model {
           type: DataTypes.STRING(300),
           allowNull: true,
         },
-        quantity: {
+        payment_amount: {
           type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        price: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
+          allowNull: true,
         },
         issued_coupon_id: {
           type: DataTypes.INTEGER,
@@ -53,11 +61,15 @@ export default class orders extends Model {
             key: 'id',
           },
         },
-        buyer_city: {
+        country_code: {
           type: DataTypes.STRING(300),
           allowNull: true,
+          references: {
+            model: 'country_codes',
+            key: 'country_code',
+          },
         },
-        buyer_country: {
+        buyer_city: {
           type: DataTypes.STRING(300),
           allowNull: true,
         },
@@ -82,6 +94,11 @@ export default class orders extends Model {
             fields: [{ name: 'id' }],
           },
           {
+            name: 'user_id',
+            using: 'BTREE',
+            fields: [{ name: 'user_id' }],
+          },
+          {
             name: 'product_id',
             using: 'BTREE',
             fields: [{ name: 'product_id' }],
@@ -90,6 +107,11 @@ export default class orders extends Model {
             name: 'issued_coupon_id',
             using: 'BTREE',
             fields: [{ name: 'issued_coupon_id' }],
+          },
+          {
+            name: 'country_code',
+            using: 'BTREE',
+            fields: [{ name: 'country_code' }],
           },
         ],
       }
