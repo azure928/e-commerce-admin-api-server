@@ -58,14 +58,34 @@ export async function createOrder(data) {
     throw error;
   }
 
-  const selectedIssuedCoupons = await orderRepository.readIssuedCouponsById(
-    issued_coupon_id
+  const country_name = selectedCountry.country_name;
+
+  const deliveryCost = await orderRepository.readDeliveryCost(
+    quantity,
+    country_name
   );
-  console.log('selectedIssuedCoupons!!!!!!!!!!!', selectedIssuedCoupons);
-  if (!selectedIssuedCoupons) {
-    const error = new Error('해당하는 쿠폰이 존재하지 않습니다.');
-    error.statusCode = 404;
-    throw error;
+  console.log('배송비 확인!!!!!!!!!', deliveryCost[0]);
+
+  //return deliveryCost;
+
+  if (!issued_coupon_id) {
+    console.log('쿠폰없음');
+    const payment_amount = selectedProduct.price * quantity + deliveryCost[0];
+    console.log('상품가격!!', selectedProduct.price);
+    console.log('수량!!', quantity);
+    console.log('배송비', deliveryCost[0]);
+    console.log('결제 금액!!', payment_amount);
+  } else {
+    //쿠폰사용
+    const selectedIssuedCoupons = await orderRepository.readIssuedCouponsById(
+      issued_coupon_id
+    );
+    //console.log('selectedIssuedCoupons!!!!!!!!!!!', selectedIssuedCoupons);
+    if (!selectedIssuedCoupons) {
+      const error = new Error('해당하는 쿠폰이 존재하지 않습니다.');
+      error.statusCode = 404;
+      throw error;
+    }
   }
 
   //return await couponRepository.createOrder(data);

@@ -3,6 +3,7 @@ const Orders = db.orders;
 const Products = db.products;
 const Country_codes = db.country_codes;
 const Issued_coupons = db.issued_coupons;
+const Delivery_costs = db.delivery_costs;
 //import sequelize from 'sequelize';
 import SQ from 'sequelize';
 import { Op } from 'sequelize';
@@ -97,7 +98,10 @@ export const updateOrderById = async (id, delivery_status) => {
 
 export async function readProductById(id) {
   return await Products.findOne({
-    attributes: ['id'],
+    attributes: [
+      ['id', 'id'],
+      ['price', 'price'],
+    ],
     where: {
       id: id,
     },
@@ -119,4 +123,16 @@ export async function readIssuedCouponsById(issued_coupon_id) {
       id: issued_coupon_id,
     },
   });
+}
+
+export async function readDeliveryCost(quantity, selectedCountry) {
+  const selectedDeliveryCost = await Delivery_costs.findOne({
+    attributes: [selectedCountry],
+    where: { quantity: quantity },
+    raw: true,
+  });
+
+  const deliveryCost = Object.values(selectedDeliveryCost);
+  //console.log('deliveryCost????????', deliveryCost);
+  return deliveryCost;
 }

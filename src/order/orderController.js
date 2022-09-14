@@ -37,8 +37,9 @@ export const createOrder = async (req, res) => {
   try {
     const data = req.body;
 
-    await orderService.createOrder(data);
-    return res.status(201).json({ message: '주문 내역 추가 성공' });
+    const deliveryCost = await orderService.createOrder(data);
+    //return res.status(201).json({ message: '주문 내역 추가 성공' });
+    return res.status(201).send(deliveryCost);
   } catch (error) {
     console.log(error);
     return res.status(error.statusCode || 500).send(
