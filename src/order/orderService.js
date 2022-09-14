@@ -29,3 +29,44 @@ export async function updateOrder(id, delivery_status) {
     }
   }
 }
+
+export async function createOrder(data) {
+  const {
+    buyer_name,
+    product_id,
+    quantity,
+    country_code,
+    buyr_city,
+    buyr_zipx,
+    issued_coupon_id,
+  } = data;
+
+  const selectedProduct = await orderRepository.readProductById(product_id);
+  if (!selectedProduct) {
+    const error = new Error('해당하는 상품이 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const selectedCountry = await orderRepository.readCountryNameByCode(
+    country_code
+  );
+  //console.log('selectedCountry!!!!!!!!!!!', selectedCountry);
+  if (!selectedCountry) {
+    const error = new Error('해당하는 국가가 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const selectedIssuedCoupons = await orderRepository.readIssuedCouponsById(
+    issued_coupon_id
+  );
+  console.log('selectedIssuedCoupons!!!!!!!!!!!', selectedIssuedCoupons);
+  if (!selectedIssuedCoupons) {
+    const error = new Error('해당하는 쿠폰이 존재하지 않습니다.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  //return await couponRepository.createOrder(data);
+}

@@ -32,3 +32,19 @@ export const updateOrder = async (req, res) => {
     );
   }
 };
+
+export const createOrder = async (req, res) => {
+  try {
+    const data = req.body;
+
+    await orderService.createOrder(data);
+    return res.status(201).json({ message: '주문 내역 추가 성공' });
+  } catch (error) {
+    console.log(error);
+    return res.status(error.statusCode || 500).send(
+      { error: error.message } || {
+        error: 'Internal Server Error',
+      }
+    );
+  }
+};

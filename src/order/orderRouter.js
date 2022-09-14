@@ -9,4 +9,7 @@ router.get('/orders', orderController.readOrders);
 //주문건에 대하여 발송 처리 (제품 배송 상태 업데이트)
 router.patch('/orders/:id', orderController.updateOrder);
 
+//주문 내역 추가
+router.post('/orders', orderController.createOrder);
+
 export default router;
