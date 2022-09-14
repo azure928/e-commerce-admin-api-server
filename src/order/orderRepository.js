@@ -7,17 +7,17 @@ import { Op } from 'sequelize';
 const Sequelize = SQ.Sequelize;
 
 export async function readOrders(keyword, start, end) {
+  console.log('keyword', keyword);
   let endDate = new Date();
   let startDate = new Date();
 
   if (start && !end) {
-    //console.log('여기걸림');
     startDate = new Date(start);
-    //console.log('endDate 확인', endDate);
-    //console.log('startDate 확인', startDate);
   } else if (!start && end) {
     endDate = new Date(end);
     endDate.setDate(endDate.getDate() + 1);
+    startDate.setDate(startDate.getDate() - 365);
+  } else if (!start && !end) {
     startDate.setDate(startDate.getDate() - 365);
   } else if (start && end) {
     endDate = new Date(end);
@@ -28,18 +28,18 @@ export async function readOrders(keyword, start, end) {
   return await Orders.findAll({
     attributes: [
       ['id', '주문내역_id'],
-      [Sequelize.col('products.name'), '상품명'],
+      [Sequelize.col('product.name'), '상품명'],
       ['buyer_name', '주문자명'],
       ['pay_state', '결제상태'],
       ['delivery_status', '배송상태'],
-      [Sequelize.col('products.price'), '상품가격'],
+      [Sequelize.col('product.price'), '상품가격'],
       ['price', '결제금액'],
       ['createdAt', '주문일'],
     ],
     include: [
       {
         model: Products,
-        as: 'products',
+        as: 'product',
         attributes: [],
       },
     ],
