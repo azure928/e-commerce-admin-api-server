@@ -20,6 +20,12 @@ export async function updateOrder(id, delivery_status) {
     error.statusCode = 404;
     throw error;
   } else {
-    await orderRepository.updateOrderById(id, delivery_status);
+    if (!delivery_status) {
+      const error = new Error('업데이트할 배송상태를 선택해 주세요.');
+      error.statusCode = 400;
+      throw error;
+    } else {
+      await orderRepository.updateOrderById(id, delivery_status);
+    }
   }
 }
