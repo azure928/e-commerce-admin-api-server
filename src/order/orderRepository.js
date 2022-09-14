@@ -10,6 +10,7 @@ import SQ from 'sequelize';
 import { Op } from 'sequelize';
 const Sequelize = SQ.Sequelize;
 
+//주문 내역 조회 - 검색, 필터링
 export async function readOrders(keyword, start, end) {
   console.log('keyword', keyword);
   let endDate = new Date();
@@ -84,6 +85,7 @@ export async function readOrderById(id) {
   });
 }
 
+//제품 배송 상태 업데이트
 export const updateOrderById = async (id, delivery_status) => {
   return await Orders.update(
     {
@@ -146,6 +148,29 @@ export async function readDeliveryCost(quantity, selectedCountry) {
   });
 
   const deliveryCost = Object.values(selectedDeliveryCost);
-  //console.log('deliveryCost????????', deliveryCost);
   return deliveryCost;
 }
+
+export const createOrder = async orderInfo => {
+  const {
+    buyer_name,
+    product_id,
+    quantity,
+    country_code,
+    buyr_city,
+    buyr_zipx,
+    payment_amount,
+    issued_coupon_id,
+  } = orderInfo;
+
+  return await Orders.create({
+    buyer_name: buyer_name,
+    product_id: product_id,
+    quantity: quantity,
+    country_code: country_code,
+    buyr_city: buyr_city,
+    buyr_zipx: buyr_zipx,
+    payment_amount: payment_amount,
+    issued_coupon_id: issued_coupon_id,
+  });
+};

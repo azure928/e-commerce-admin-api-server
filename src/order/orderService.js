@@ -1,5 +1,6 @@
 import * as orderRepository from './orderRepository.js';
 
+//주문 내역 조회 - 검색, 필터링
 export async function readOrders(keyword, start, end) {
   const selectedOrders = await orderRepository.readOrders(keyword, start, end);
 
@@ -12,6 +13,7 @@ export async function readOrders(keyword, start, end) {
   }
 }
 
+//제품 배송 상태 업데이트
 export async function updateOrder(id, delivery_status) {
   const selectedOrder = await orderRepository.readOrderById(id);
 
@@ -30,6 +32,7 @@ export async function updateOrder(id, delivery_status) {
   }
 }
 
+//주문 내역 추가
 export async function createOrder(data) {
   const {
     buyer_name,
@@ -41,6 +44,7 @@ export async function createOrder(data) {
     issued_coupon_id,
   } = data;
 
+  //product_id에 해당하는 상품이 존재하지 않을 경우
   const selectedProduct = await orderRepository.readProductById(product_id);
   if (!selectedProduct) {
     const error = new Error('해당하는 상품이 존재하지 않습니다.');
@@ -48,18 +52,20 @@ export async function createOrder(data) {
     throw error;
   }
 
+  //country_code에 해당하는 국가가 존재하지 않을 경우
   const selectedCountry = await orderRepository.readCountryNameByCode(
     country_code
   );
-  //console.log('selectedCountry!!!!!!!!!!!', selectedCountry);
   if (!selectedCountry) {
     const error = new Error('해당하는 국가가 존재하지 않습니다.');
     error.statusCode = 404;
     throw error;
   }
 
+  //country_code로 국가명 가져오기
   const country_name = selectedCountry.country_name;
 
+  //수량이랑 국가명으로 배송비 가져오기
   const deliveryCost = await orderRepository.readDeliveryCost(
     quantity,
     country_name
@@ -69,25 +75,26 @@ export async function createOrder(data) {
   let payment_amount;
 
   if (!issued_coupon_id) {
-    console.log('쿠폰없음');
+    //입력된 쿠폰이 없는 경우
     payment_amount = selectedProduct.price * quantity + deliveryCost[0];
     //console.log('상품가격!!', selectedProduct.price);
     //console.log('수량!!', quantity);
     //console.log('배송비', deliveryCost[0]);
     //console.log('결제 금액!!', payment_amount);
   } else {
-    console.log('쿠폰있음');
+    //입력된 쿠폰이 있는 경우
     const selectedIssuedCoupons = await orderRepository.readIssuedCouponById(
       issued_coupon_id
     );
 
-    //console.log('selectedIssuedCoupons!!!!!!!!!!!', selectedIssuedCoupons);
+    //입력된 쿠폰 아이디에 해당하는 쿠폰이 없는 경우
     if (!selectedIssuedCoupons) {
       const error = new Error('입력하신 쿠폰이 존재하지 않습니다.');
       error.statusCode = 404;
       throw error;
     }
 
+    //쿠폰 타입 가져오기
     const couponType = await orderRepository.readCouponTypeById(
       selectedIssuedCoupons.coupon_type_id
     );
@@ -95,13 +102,33 @@ export async function createOrder(data) {
     //console.log('쿠폰타입', couponType.type);
     //console.log('할인가격', couponType.discount_price);
 
-    if (couponType.type == 'delivery') {
+    //쿠폰 타입별로 주문금액 계산
+    if (couponType.type == 'delivery' || couponType.type == 'fixed') {
+      console.log('쿠폰 타입이 배송비거나 정액할인일때');
       payment_amount =
         selectedProduct.price * quantity +
         deliveryCost[0] -
         couponType.discount_price;
+    } else if (couponType.type == 'percent') {
+      console.log('쿠폰 타입이 % 할인일때');
+      payment_amount =
+        (selectedProduct.price * quantity * (100 - couponType.discount_price)) /
+          100 +
+        deliveryCost[0];
     }
   }
 
-  //return await couponRepository.createOrder(data);
+  //주문 데이터 생성
+  const orderInfo = {
+    buyer_name,
+    product_id,
+    quantity,
+    country_code,
+    buyr_city,
+    buyr_zipx,
+    payment_amount,
+    issued_coupon_id,
+  };
+
+  return await orderRepository.createOrder(orderInfo);
 }
