@@ -1,5 +1,6 @@
 import express from 'express';
 import orderRouter from './order/orderRouter.js';
+import couponRouter from './coupon/couponRouter.js';
 
 const router = express.Router();
 
@@ -9,5 +10,6 @@ router.get('/ping', (req, res) => {
 });
 
 router.use(orderRouter);
+router.use(couponRouter);
 
 export default router;
