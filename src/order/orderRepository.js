@@ -76,6 +76,7 @@ export async function readOrders(keyword, start, end) {
   });
 }
 
+////id로 order 가져오기
 export async function readOrderById(id) {
   return await Orders.findOne({
     attributes: ['id'],
@@ -99,6 +100,7 @@ export const updateOrderById = async (id, delivery_status) => {
   );
 };
 
+////id로 product 가져오기
 export async function readProductById(id) {
   return await Products.findOne({
     attributes: [
@@ -111,6 +113,7 @@ export async function readProductById(id) {
   });
 }
 
+////country_code로 country_name가져오기
 export async function readCountryNameByCode(country_code) {
   return await Country_codes.findOne({
     attributes: ['country_name'],
@@ -120,6 +123,7 @@ export async function readCountryNameByCode(country_code) {
   });
 }
 
+////id로 issued_coupon 가져오기
 export async function readIssuedCouponById(issued_coupon_id) {
   return await Issued_coupons.findOne({
     where: {
@@ -128,6 +132,7 @@ export async function readIssuedCouponById(issued_coupon_id) {
   });
 }
 
+////id로 coupon_type 가져오기
 export async function readCouponTypeById(id) {
   return await Coupon_types.findOne({
     attributes: [
@@ -140,9 +145,10 @@ export async function readCouponTypeById(id) {
   });
 }
 
-export async function readDeliveryCost(quantity, selectedCountry) {
+////quantity, country_name으로 배송비 가져오기
+export async function readDeliveryCost(quantity, country_name) {
   const selectedDeliveryCost = await Delivery_costs.findOne({
-    attributes: [selectedCountry],
+    attributes: [country_name],
     where: { quantity: quantity },
     raw: true,
   });
@@ -151,6 +157,7 @@ export async function readDeliveryCost(quantity, selectedCountry) {
   return deliveryCost;
 }
 
+//주문 내역 추가
 export const createOrder = async orderInfo => {
   const {
     buyer_name,
