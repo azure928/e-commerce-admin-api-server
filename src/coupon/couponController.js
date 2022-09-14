@@ -5,7 +5,7 @@ export const createCouponTypes = async (req, res) => {
   try {
     const data = {
       type: req.body.type,
-      discount_amount: req.body.discount_amount,
+      discount_price: req.body.discount_price,
       coupon_name: req.body.coupon_name,
       coupon_code: v4(),
     };

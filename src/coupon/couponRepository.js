@@ -5,13 +5,13 @@ import sequelize from 'sequelize';
 
 export const createCouponTypes = async (
   type,
-  discount_amount,
+  discount_price,
   coupon_name,
   coupon_code
 ) => {
   return await Coupon_types.create({
     type: type,
-    discount_amount: discount_amount,
+    discount_price: discount_price,
     name: coupon_name,
     coupon_code: coupon_code,
   });
