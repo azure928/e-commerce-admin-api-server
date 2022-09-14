@@ -24,7 +24,7 @@ export async function createCouponTypes(data) {
   }
 }
 
-export async function readIssuedCoupon(id) {
+export async function readIssuedCouponsUsage(id) {
   const selectedIssuedCoupon = await couponRepository.readIssuedCouponById(id);
 
   if (!selectedIssuedCoupon) {

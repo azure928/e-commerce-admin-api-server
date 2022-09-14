@@ -19,8 +19,20 @@ export const createCouponTypes = async (
 
 export const readIssuedCouponById = async id => {
   return await Issued_coupons.findOne({
-    attributes: ['id', 'is_used'],
-
+    attributes: [
+      ['id', '발급된 쿠폰 id'],
+      ['is_used', '사용내역'],
+      [sequelize.col('coupon_type.name'), '쿠폰 이름'],
+      [sequelize.col('coupon_type.type'), '쿠폰 종류'],
+      ['discounted_amount', '할인된 금액'],
+    ],
+    include: [
+      {
+        model: Coupon_types,
+        as: 'coupon_type',
+        attributes: [],
+      },
+    ],
     where: {
       id: id,
     },

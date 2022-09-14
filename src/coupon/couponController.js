@@ -22,11 +22,11 @@ export const createCouponTypes = async (req, res) => {
   }
 };
 
-export const readIssuedCoupon = async (req, res) => {
+export const readIssuedCouponsUsage = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const selectedIssuedCoupon = await couponService.readIssuedCoupon(id);
+    const selectedIssuedCoupon = await couponService.readIssuedCouponsUsage(id);
     res.status(200).json(selectedIssuedCoupon);
   } catch (error) {
     console.log(error);
