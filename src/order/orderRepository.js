@@ -1,11 +1,16 @@
 import { db } from '../../database/models/index.js';
 const Orders = db.orders;
 const Products = db.products;
+const Country_codes = db.country_codes;
+const Issued_coupons = db.issued_coupons;
+const Delivery_costs = db.delivery_costs;
+const Coupon_types = db.coupon_types;
 //import sequelize from 'sequelize';
 import SQ from 'sequelize';
 import { Op } from 'sequelize';
 const Sequelize = SQ.Sequelize;
 
+//주문 내역 조회 - 검색, 필터링
 export async function readOrders(keyword, start, end) {
   console.log('keyword', keyword);
   let endDate = new Date();
@@ -71,6 +76,7 @@ export async function readOrders(keyword, start, end) {
   });
 }
 
+////id로 order 가져오기
 export async function readOrderById(id) {
   return await Orders.findOne({
     attributes: ['id'],
@@ -80,6 +86,7 @@ export async function readOrderById(id) {
   });
 }
 
+//제품 배송 상태 업데이트
 export const updateOrderById = async (id, delivery_status) => {
   return await Orders.update(
     {
@@ -91,4 +98,86 @@ export const updateOrderById = async (id, delivery_status) => {
       },
     }
   );
+};
+
+////id로 product 가져오기
+export async function readProductById(id) {
+  return await Products.findOne({
+    attributes: [
+      ['id', 'id'],
+      ['price', 'price'],
+    ],
+    where: {
+      id: id,
+    },
+  });
+}
+
+////country_code로 country_name가져오기
+export async function readCountryNameByCode(country_code) {
+  return await Country_codes.findOne({
+    attributes: ['country_name'],
+    where: {
+      country_code: country_code,
+    },
+  });
+}
+
+////id로 issued_coupon 가져오기
+export async function readIssuedCouponById(issued_coupon_id) {
+  return await Issued_coupons.findOne({
+    where: {
+      id: issued_coupon_id,
+    },
+  });
+}
+
+////id로 coupon_type 가져오기
+export async function readCouponTypeById(id) {
+  return await Coupon_types.findOne({
+    attributes: [
+      ['type', 'type'],
+      ['discount_price', 'discount_price'],
+    ],
+    where: {
+      id: id,
+    },
+  });
+}
+
+////quantity, country_name으로 배송비 가져오기
+export async function readDeliveryCost(quantity, country_name) {
+  const selectedDeliveryCost = await Delivery_costs.findOne({
+    attributes: [country_name],
+    where: { quantity: quantity },
+    raw: true,
+  });
+
+  const deliveryCost = Object.values(selectedDeliveryCost);
+  return deliveryCost;
+}
+
+//주문 내역 추가
+export const createOrder = async orderInfo => {
+  const {
+    buyer_name,
+    product_id,
+    quantity,
+    country_code,
+    buyr_city,
+    buyr_zipx,
+    payment_amount,
+    issued_coupon_id,
+  } = orderInfo;
+
+  return await Orders.create({
+    buyer_name: buyer_name,
+    product_id: product_id,
+    quantity: quantity,
+    country_code: country_code,
+    buyr_city: buyr_city,
+    buyr_zipx: buyr_zipx,
+    payment_amount: payment_amount,
+    issued_coupon_id: issued_coupon_id,
+  });
 };
