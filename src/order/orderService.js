@@ -64,27 +64,42 @@ export async function createOrder(data) {
     quantity,
     country_name
   );
-  console.log('배송비 확인!!!!!!!!!', deliveryCost[0]);
+  //console.log('배송비 확인!!!!!!!!!', deliveryCost[0]);
 
-  //return deliveryCost;
+  let payment_amount;
 
   if (!issued_coupon_id) {
     console.log('쿠폰없음');
-    const payment_amount = selectedProduct.price * quantity + deliveryCost[0];
-    console.log('상품가격!!', selectedProduct.price);
-    console.log('수량!!', quantity);
-    console.log('배송비', deliveryCost[0]);
-    console.log('결제 금액!!', payment_amount);
+    payment_amount = selectedProduct.price * quantity + deliveryCost[0];
+    //console.log('상품가격!!', selectedProduct.price);
+    //console.log('수량!!', quantity);
+    //console.log('배송비', deliveryCost[0]);
+    //console.log('결제 금액!!', payment_amount);
   } else {
-    //쿠폰사용
-    const selectedIssuedCoupons = await orderRepository.readIssuedCouponsById(
+    console.log('쿠폰있음');
+    const selectedIssuedCoupons = await orderRepository.readIssuedCouponById(
       issued_coupon_id
     );
+
     //console.log('selectedIssuedCoupons!!!!!!!!!!!', selectedIssuedCoupons);
     if (!selectedIssuedCoupons) {
-      const error = new Error('해당하는 쿠폰이 존재하지 않습니다.');
+      const error = new Error('입력하신 쿠폰이 존재하지 않습니다.');
       error.statusCode = 404;
       throw error;
+    }
+
+    const couponType = await orderRepository.readCouponTypeById(
+      selectedIssuedCoupons.coupon_type_id
+    );
+
+    //console.log('쿠폰타입', couponType.type);
+    //console.log('할인가격', couponType.discount_price);
+
+    if (couponType.type == 'delivery') {
+      payment_amount =
+        selectedProduct.price * quantity +
+        deliveryCost[0] -
+        couponType.discount_price;
     }
   }
 

@@ -4,6 +4,7 @@ const Products = db.products;
 const Country_codes = db.country_codes;
 const Issued_coupons = db.issued_coupons;
 const Delivery_costs = db.delivery_costs;
+const Coupon_types = db.coupon_types;
 //import sequelize from 'sequelize';
 import SQ from 'sequelize';
 import { Op } from 'sequelize';
@@ -117,10 +118,22 @@ export async function readCountryNameByCode(country_code) {
   });
 }
 
-export async function readIssuedCouponsById(issued_coupon_id) {
+export async function readIssuedCouponById(issued_coupon_id) {
   return await Issued_coupons.findOne({
     where: {
       id: issued_coupon_id,
+    },
+  });
+}
+
+export async function readCouponTypeById(id) {
+  return await Coupon_types.findOne({
+    attributes: [
+      ['type', 'type'],
+      ['discount_price', 'discount_price'],
+    ],
+    where: {
+      id: id,
     },
   });
 }
